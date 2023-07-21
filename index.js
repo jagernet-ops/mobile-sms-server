@@ -6,7 +6,11 @@ app.get("/get-contacts", (req, res) => {
     res.send(`${execute("termux-contact-list")}`);
 });
 
+<<<<<<< HEAD
 app.get("/get-messages", (req, res) => {
+=======
+app.get("get-messages", (req, res) => {
+>>>>>>> a56f14087d0db0ad1d597e926d39e62a52c712d2
     res.send(`${execute("termux-sms-list -d -n -t all")}`);
 });
 
