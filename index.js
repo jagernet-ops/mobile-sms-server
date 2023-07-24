@@ -25,7 +25,5 @@ app.get("/get-messages", (req, res) => {
     res.send(`${execute("termux-sms-list -d -n -t all")}`);
 });
 
-app.post("/send-message", cors(), (req, res) => {});
-
 app.listen(8000);
 console.log("Now listening on port 8000");
