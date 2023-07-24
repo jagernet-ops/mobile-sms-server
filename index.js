@@ -3,7 +3,9 @@ const execute = require("child_process").execSync;
 const app = express();
 const cors = require("cors");
 
-app.get("/get-contacts", cors(), (req, res) => {
+app.use(cors());
+
+app.get("/get-contacts", (req, res) => {
     res.send(`${execute("termux-contact-list")}`);
 });
 
