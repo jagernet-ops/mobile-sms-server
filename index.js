@@ -28,7 +28,7 @@ app.get("/get-messages", (req, res) => {
 });
 
 app.post("/send-single-message", (req, res) => {
-    execute(
+    console.log(
         `termux-sms-send -n ${get(req.body, "phoneNumber")} ${get(
             req.body,
             "messageVal"
