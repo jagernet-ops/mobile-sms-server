@@ -27,13 +27,14 @@ app.get("/get-messages", (req, res) => {
     res.send(`${execute("termux-sms-list -d -n -t all")}`);
 });
 
-app.post("/send-single-message", (req) => {
+app.post("/send-single-message", (req, res) => {
     execute(
         `termux-sms-send -n ${get(req.body, "phoneNumber")} ${get(
             req.body,
             "messageVal"
         )}`
     );
+    res.status(200).end();
 });
 
 //Make group message and multiple number message
