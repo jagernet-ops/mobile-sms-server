@@ -40,10 +40,11 @@ app.listen(8000);
 
 const parseNetworkInterface = (body) => {
     let ipV4Address = "";
-    ipV4Address = body["Wi-Fi"].filter(
+    ipV4Address = body["wlan0"].filter(
         (interface) => interface["family"] === "IPv4"
     )[0]["address"];
     return ipV4Address;
 };
-console.log(os.networkInterfaces());
-console.log(`Now listening at localhost:8000`);
+console.log(
+    `Now listening at ${parseNetworkInterface(os.networkInterfaces())}:8000`
+);
