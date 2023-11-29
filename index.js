@@ -23,7 +23,10 @@ app.get("/get-contacts", (req, res) => {
 });
 
 app.get("/get-messages", (req, res) => {
-    res.send(`${execute("termux-sms-list -d -n -t all")}`);
+    const contact = req.query.contact;
+    res.send(
+        `${execute(`termux-sms-list -l 99999 -d -n -t all -f ${contact}`)}`
+    );
 });
 
 app.post("/send-single-message", (req, res) => {
@@ -44,6 +47,6 @@ const parseNetworkInterface = (body) => {
     )[0]["address"];
     return ipV4Address;
 };
-console.log(
-    `Now listening at ${parseNetworkInterface(os.networkInterfaces())}:8000`
-);
+// console.log(
+//     `Now listening at ${parseNetworkInterface(os.networkInterfaces())}:8000`
+// );
