@@ -24,9 +24,13 @@ app.get("/get-contacts", (req, res) => {
 
 app.get("/get-messages", (req, res) => {
     const contact = req.query.contact;
-    res.send(
-        `${execute(`termux-sms-list -l 99999 -d -n -t all -f ${contact}`)}`
-    );
+    if (contact) {
+        res.send(
+            `${execute(`termux-sms-list -l 99999 -d -n -t all -f ${contact}`)}`
+        );
+    } else {
+        res.send(`${execute(`termux-sms-list -l 99999 -d -n -t all`)}`);
+    }
 });
 
 app.post("/send-single-message", (req, res) => {
