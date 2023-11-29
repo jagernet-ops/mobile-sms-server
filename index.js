@@ -47,6 +47,6 @@ const parseNetworkInterface = (body) => {
     )[0]["address"];
     return ipV4Address;
 };
-// console.log(
-//     `Now listening at ${parseNetworkInterface(os.networkInterfaces())}:8000`
-// );
+console.log(
+    `Now listening at ${parseNetworkInterface(os.networkInterfaces())}:8000`
+);
