@@ -53,6 +53,7 @@ app.get("/get-messages", (req, res) => {
         }
         if (
             data != lastData &&
+            lastData.length > 0 &&
             lastData[lastData.length - 1].sender !== "You"
         ) {
             wss.clients.forEach((ws) => {
