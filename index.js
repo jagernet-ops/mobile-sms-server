@@ -39,7 +39,7 @@ app.get("/get-messages", (req, res) => {
         const textUpdate = execute("termux-notification-list").filter(
             ({ id }) => id === 123 // Android uses custom id's for application notifications and my messenger's id is 123
         );
-        if (textUpdate && !blacklistedNotifications.includes(textUpdate.when)) {
+        if (textUpdate && !blacklistedNotifications.includes(textUpdate)) {
             wss.clients.forEach((ws) => {
                 ws.send("New Messages!");
             });
