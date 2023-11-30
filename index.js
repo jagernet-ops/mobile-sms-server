@@ -39,10 +39,7 @@ app.get("/get-messages", (req, res) => {
             execute("termux-notification-list").toString()
         ).filter(({ id }) => id === 123);
 
-        if (
-            textUpdate &&
-            !blacklistedNotifications.some((e) => e?.when === textUpdate?.when)
-        ) {
+        if (textUpdate && !blacklistedNotifications.filter(textUpdate.when)) {
             wss.clients.forEach((ws) => {
                 ws.send("New Messages!");
             });
