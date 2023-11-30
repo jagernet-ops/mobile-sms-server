@@ -39,8 +39,8 @@ app.get("/get-messages", (req, res) => {
             ({ id }) => id === 123 // Android uses custom id's for application notifications and my messenger's id is 123
         );
         if (textUpdate && !blacklistedNotifications.includes(textUpdate.when)) {
+            console.log("Test");
             wss.clients.forEach((ws) => {
-                console.log("Test");
                 ws.send("New Messages!");
             });
             blacklistedNotifications.push(textUpdate.when);
