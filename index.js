@@ -41,7 +41,10 @@ app.get("/get-messages", (req, res) => {
         }
         if (textUpdate && textUpdate.when !== lastTime) {
             wss.clients.forEach((ws) => {
-                ws.send({ message: textUpdate.content });
+                ws.send({
+                    contact: textUpdate.title,
+                    message: textUpdate.content,
+                });
             });
             lastTime = textUpdate.when;
         }
