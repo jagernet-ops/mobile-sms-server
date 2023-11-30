@@ -60,7 +60,6 @@ app.get("/get-messages", (req, res) => {
             lastTimeAll = textUpdate.when;
         }
         if (textUpdate && textUpdate.when !== lastTimeAll) {
-            console.log("Test");
             wss.clients.forEach((ws) => {
                 ws.send(
                     JSON.stringify({
