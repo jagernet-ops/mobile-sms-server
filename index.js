@@ -41,10 +41,12 @@ app.get("/get-messages", (req, res) => {
         }
         if (textUpdate && textUpdate.when !== lastTime) {
             wss.clients.forEach((ws) => {
-                ws.send({
-                    contact: textUpdate.title,
-                    message: textUpdate.content,
-                });
+                ws.send(
+                    JSON.stringify({
+                        contact: textUpdate.title,
+                        message: textUpdate.content,
+                    })
+                );
             });
             lastTime = textUpdate.when;
         }
@@ -59,10 +61,12 @@ app.get("/get-messages", (req, res) => {
         }
         if (textUpdate && textUpdate.when !== lastTimeAll) {
             wss.clients.forEach((ws) => {
-                ws.send({
-                    contact: textUpdate.title,
-                    message: textUpdate.content,
-                });
+                ws.send(
+                    JSON.stringify({
+                        contact: textUpdate.title,
+                        message: textUpdate.content,
+                    })
+                );
             });
             lastTimeAll = data;
         }
