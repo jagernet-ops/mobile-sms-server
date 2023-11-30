@@ -19,12 +19,8 @@ const corsMiddleware = (req, res, next) => {
 app.use(express.json());
 app.use(corsMiddleware);
 
-const wss = new ws.WebSocketServer({ port: 8080 })
-let requestArr = []
-
-wss.on("connection", (ws) => {
-    ws.send("Welcome to notification servers");
-})
+const wss = new ws.WebSocketServer({ port: 8080 });
+let requestArr = [];
 
 app.get("/get-contacts", (req, res) => {
     res.send(`${execute("termux-contact-list")}`);
@@ -33,16 +29,18 @@ app.get("/get-contacts", (req, res) => {
 app.get("/get-messages", (req, res) => {
     const contact = req.query.contact;
     if (contact) {
-        const data = execute(`termux-sms-list -l 99999 -d -n -t all -f ${contact}`)
-        if(requestArr && data.length > requestArr[requestArr.length-1].length && requestArr[requestArr.length-1][requestArr[requestArr.length-1].length-1].sender !== "You"){
+        const data = execute(
+            `termux-sms-list -l 99999 -d -n -t all -f ${contact}`
+        );
+        if (requestArr) {
             wss.clients.forEach((ws) => {
-                ws.send("New Messages!");
-            })
+                ws.send(data.length);
+            });
         }
         requestArr.push(data);
         res.send(data);
     } else {
-        const data = execute(`termux-sms-list -l 99999 -d -n -t all`)
+        const data = execute(`termux-sms-list -l 99999 -d -n -t all`);
         res.send(data);
     }
 });
