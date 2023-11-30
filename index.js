@@ -21,6 +21,7 @@ app.use(corsMiddleware);
 
 const wss = new ws.WebSocketServer({ port: 8080 });
 let lastTime = "";
+let lastTimeAll = "";
 
 app.get("/get-contacts", (req, res) => {
     res.send(`${execute("termux-contact-list")}`);
@@ -40,7 +41,7 @@ app.get("/get-messages", (req, res) => {
         }
         if (textUpdate && textUpdate.when !== lastTime) {
             wss.clients.forEach((ws) => {
-                ws.send(textUpdate.content);
+                ws.send({ message: textUpdate.content });
             });
             lastTime = textUpdate.when;
         }
@@ -50,14 +51,17 @@ app.get("/get-messages", (req, res) => {
         const textUpdate = JSON.parse(
             execute("termux-notification-list").toString()
         ).filter(({ id }) => id === 123)[0];
-        if (lastTime === "") {
-            lastTime = textUpdate.when;
+        if (lastTimeAll === "") {
+            lastTimeAll = textUpdate.when;
         }
-        if (textUpdate && textUpdate.when !== lastTime) {
+        if (textUpdate && textUpdate.when !== lastTimeAll) {
             wss.clients.forEach((ws) => {
-                ws.send(textUpdate.content);
+                ws.send({
+                    contact: textUpdate.title,
+                    message: textUpdate.content,
+                });
             });
-            lastTime = data;
+            lastTimeAll = data;
         }
         res.send(data);
     }
