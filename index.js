@@ -41,6 +41,7 @@ app.get("/get-messages", (req, res) => {
         if (lastTime === "") {
             lastTime = textUpdate.when;
         }
+        console.log("Lasttime", lastTime, "textupdate", textUpdate.when);
         if (textUpdate && textUpdate.when !== lastTime) {
             wss.clients.forEach((ws) => {
                 ws.send("New Messages!");
