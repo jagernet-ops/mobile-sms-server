@@ -23,7 +23,7 @@ const wss = new ws.WebSocketServer({ port: 8080 });
 wss.on("connection", (ws) => {
     ws.send("Welcome to the notifications relay!");
 });
-let blacklistedNotifications = [];
+let lastTime = "";
 
 app.get("/get-contacts", (req, res) => {
     res.send(`${execute("termux-contact-list")}`);
@@ -38,15 +38,14 @@ app.get("/get-messages", (req, res) => {
         const textUpdate = JSON.parse(
             execute("termux-notification-list").toString()
         ).filter(({ id }) => id === 123);
-        console.log(textUpdate);
-        if (
-            textUpdate &&
-            !blacklistedNotifications.filter((e) => e == textUpdate.when)
-        ) {
+        if (lastTime === "") {
+            lastTime = textUpdate.when;
+        }
+        if (textUpdate && textUpdate.when !== lastTime) {
             wss.clients.forEach((ws) => {
                 ws.send("New Messages!");
             });
-            blacklistedNotifications.push(textUpdate.when);
+            lastTime = textUpdate.when;
         }
         res.send(data);
     } else {
