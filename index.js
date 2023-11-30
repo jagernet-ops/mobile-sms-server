@@ -34,7 +34,7 @@ app.get("/get-messages", (req, res) => {
         );
         if (requestArr) {
             wss.clients.forEach((ws) => {
-                ws.send(data.length);
+                ws.send("New Messages!");
             });
         }
         requestArr.push(data);
