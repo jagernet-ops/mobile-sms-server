@@ -20,6 +20,9 @@ app.use(express.json());
 app.use(corsMiddleware);
 
 const wss = new ws.WebSocketServer({ port: 8080 });
+wss.on("connection", (ws) => {
+    ws.send("Welcome to the notifications relay!");
+});
 let blacklistedNotifications = [];
 
 app.get("/get-contacts", (req, res) => {
