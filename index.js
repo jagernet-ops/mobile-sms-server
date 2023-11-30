@@ -40,6 +40,7 @@ app.get("/get-messages", (req, res) => {
         );
         if (textUpdate && !blacklistedNotifications.includes(textUpdate.when)) {
             wss.clients.forEach((ws) => {
+                console.log("Test");
                 ws.send("New Messages!");
             });
             blacklistedNotifications.push(textUpdate.when);
