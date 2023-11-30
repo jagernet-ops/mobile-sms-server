@@ -31,12 +31,12 @@ app.get("/get-contacts", (req, res) => {
 
 app.get("/get-messages", (req, res) => {
     const contact = req.query.contact;
-    console.log(blacklistedNotifications);
     if (contact) {
         const data = execute(
             `termux-sms-list -l 99999 -d -n -t all -f ${contact}`
         );
-        const textUpdate = execute("termux-notification-list").toJSON();
+        const textUpdate = execute("termux-notification-list");
+        console.log(textUpdate.toString());
         if (
             textUpdate &&
             !blacklistedNotifications.some((e) => e.data === textUpdate.data)
