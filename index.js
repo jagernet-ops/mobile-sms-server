@@ -35,8 +35,10 @@ app.get("/get-messages", (req, res) => {
         const data = execute(
             `termux-sms-list -l 99999 -d -n -t all -f ${contact}`
         );
-        const textUpdate = execute("termux-notification-list");
-        console.log(JSON.parse(textUpdate.toString()));
+        const textUpdate = JSON.parse(
+            execute("termux-notification-list").toString()
+        ).filter(({ id }) => id === 123);
+        console.log(textUpdate);
         if (
             textUpdate &&
             !blacklistedNotifications.some((e) => e.data === textUpdate.data)
