@@ -37,7 +37,10 @@ app.get("/get-messages", (req, res) => {
             `termux-sms-list -l 99999 -d -n -t all -f ${contact}`
         );
         const textUpdate = execute("termux-notification-list").toJSON();
-        if (textUpdate && !blacklistedNotifications.includes(textUpdate)) {
+        if (
+            textUpdate &&
+            !blacklistedNotifications.some((e) => e.data === textUpdate.data)
+        ) {
             wss.clients.forEach((ws) => {
                 ws.send("New Messages!");
             });
