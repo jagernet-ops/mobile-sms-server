@@ -20,9 +20,6 @@ app.use(express.json());
 app.use(corsMiddleware);
 
 const wss = new ws.WebSocketServer({ port: 8080 });
-wss.on("connection", (ws) => {
-    ws.send("Welcome to the notifications relay!");
-});
 let lastTime = "";
 
 app.get("/get-contacts", (req, res) => {
@@ -43,7 +40,7 @@ app.get("/get-messages", (req, res) => {
         }
         if (textUpdate && textUpdate.when !== lastTime) {
             wss.clients.forEach((ws) => {
-                ws.send("New Messages!");
+                ws.send(textUpdate.content);
             });
             lastTime = textUpdate.when;
         }
