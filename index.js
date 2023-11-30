@@ -56,6 +56,7 @@ app.get("/get-messages", (req, res) => {
         const textUpdate = JSON.parse(
             execute("termux-notification-list").toString()
         ).filter(({ id }) => id === 123)[0];
+        console.log(textUpdate);
         if (lastTimeAll === "") {
             lastTimeAll = textUpdate.when;
         }
