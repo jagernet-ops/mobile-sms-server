@@ -20,7 +20,6 @@ app.use(express.json());
 app.use(corsMiddleware);
 
 const wss = new ws.WebSocketServer({ port: 8080 });
-let lastData = [];
 let lastTime = "";
 
 app.get("/get-contacts", (req, res) => {
@@ -48,18 +47,17 @@ app.get("/get-messages", (req, res) => {
         res.send(data);
     } else {
         const data = execute(`termux-sms-list -l 99999 -d -n -t all`);
-        if (lastData === []) {
-            lastData = data;
+        const textUpdate = JSON.parse(
+            execute("termux-notification-list").toString()
+        ).filter(({ id }) => id === 123)[0];
+        if (lastTime === "") {
+            lastTime = textUpdate.when;
         }
-        if (
-            data != lastData &&
-            lastData.length > 0 &&
-            lastData[lastData.length - 1].sender !== "You"
-        ) {
+        if (textUpdate && textUpdate.when !== lastTime) {
             wss.clients.forEach((ws) => {
-                ws.send("Check the home page for more info!");
+                ws.send(textUpdate.content);
             });
-            lastData = data;
+            lastTime = data;
         }
         res.send(data);
     }
