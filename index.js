@@ -73,5 +73,9 @@ const parseNetworkInterface = (body) => {
     return ipV4Address;
 };
 console.log(
-    `Now listening at ${parseNetworkInterface(os.networkInterfaces())}:8000`
+    `Text API listening at ${parseNetworkInterface(
+        os.networkInterfaces()
+    )}:8000\nNotification relay listening on ${parseNetworkInterface(
+        os.networkInterfaces()
+    )}:8080`
 );
