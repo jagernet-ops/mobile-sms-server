@@ -43,7 +43,7 @@ app.get("/get-messages", (req, res) => {
             wss.clients.forEach((ws) => {
                 ws.send("New Messages!");
             });
-            blacklistedNotifications.push(textUpdate.when);
+            blacklistedNotifications.push(textUpdate);
         }
         res.send(data);
     } else {
