@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(corsMiddleware);
 
 const wss = new ws.WebSocketServer({ port: 8080 });
-let requestArr = [];
+let blacklistedNotifications = [];
 
 app.get("/get-contacts", (req, res) => {
     res.send(`${execute("termux-contact-list")}`);
@@ -32,12 +32,15 @@ app.get("/get-messages", (req, res) => {
         const data = execute(
             `termux-sms-list -l 99999 -d -n -t all -f ${contact}`
         );
-        if (requestArr) {
+        const textUpdate = execute("termux-notification-list").filter(
+            ({ id }) => id === 123 // Android uses custom id's for application notifications and my messenger's id is 123
+        );
+        if (textUpdate && !blacklistedNotifications.includes(textUpdate.when)) {
             wss.clients.forEach((ws) => {
                 ws.send("New Messages!");
             });
+            blacklistedNotifications.push(textUpdate.when);
         }
-        requestArr.push(data);
         res.send(data);
     } else {
         const data = execute(`termux-sms-list -l 99999 -d -n -t all`);
